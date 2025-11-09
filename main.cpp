@@ -4,6 +4,7 @@ using namespace std;
 #include <fstream>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 struct Pieza{
     int indice;
@@ -13,6 +14,14 @@ struct Pieza{
     int posY;
     bool rot;
     int cantRot;
+};
+
+
+struct Solucion{
+    vector<Pieza> piezas;
+    vector<int> orden;
+    vector<int> alturaColumnas;
+    int H_sol;
 };
 
 int n,W; //cant piezas, Ancho tira
@@ -80,15 +89,115 @@ int calcularAlturaMax(const vector<Pieza> &piezas){
     return alt;
 }
 
+
+int evaluar(const vector<int> &orden, const vector<Pieza> &piezas){
+
+    vector<int> alturaColumnas(W,0);
+    int H_sol = 0;
+    for(int j = 0; j < n; j++){
+        int anchoPieza = piezas[orden[j]].ancho;
+        int altoPieza = piezas[orden[j]].alto;
+        int limite = W - anchoPieza;
+        int x_best = -1;
+        int y_best = 100000;
+            
+        for(int x = 0; x <= limite; x++){
+            int y_pos = 0;
+            for(int k = x; k < x + anchoPieza; k++){
+                y_pos = max(y_pos, alturaColumnas[k]);
+            }
+
+            if(y_pos < y_best){
+                y_best = y_pos;
+                x_best = x;
+            }
+        }
+
+        for(int x2 = x_best; x2 < x_best + anchoPieza; x2++){
+            alturaColumnas[x2] = y_best + altoPieza;
+            H_sol = max(H_sol, y_best + altoPieza);
+        }
+    }
+
+    return H_sol;
+}
+
+void evaluar(Solucion &sol){
+
+    vector<int> alturaColumnasAyuda(W,0);
+    int H_ayuda = 0;
+
+    for(int j = 0; j < n; j++){
+        int anchoPieza = sol.piezas[sol.orden[j]].ancho;
+        int altoPieza = sol.piezas[sol.orden[j]].alto;
+        int limite = W - anchoPieza;
+        int x_best = -1;
+        int y_best = 100000;
+            
+        for(int x = 0; x <= limite; x++){
+            int y_pos = 0;
+            for(int k = x; k < x + anchoPieza; k++){
+                y_pos = max(y_pos, alturaColumnasAyuda[k]);
+            }
+
+            if(y_pos < y_best){
+                y_best = y_pos;
+                x_best = x;
+            }
+        }
+
+        for(int x2 = x_best; x2 < x_best + anchoPieza; x2++){
+            alturaColumnasAyuda[x2] = y_best + altoPieza;
+            H_ayuda = max(H_ayuda, y_best + altoPieza);
+        }
+
+        sol.piezas[sol.orden[j]].posX = x_best;
+        sol.piezas[sol.orden[j]].posY = y_best;
+    }
+
+    sol.alturaColumnas = alturaColumnasAyuda;
+    sol.H_sol = H_ayuda;
+    
+}
+
 int main(){
 
     string nombreArchivo;
-    cout<<"Ingresa el nombre de archivo de la instancia a resolver:"<<endl;
-    cin>>nombreArchivo;
+    /*cout<<"Ingresa el nombre de archivo de la instancia a resolver:"<<endl;
+    cin>>nombreArchivo;*/
 
+    nombreArchivo = "BENG01.TXT";
     vector<Pieza> piezas = leerInstancia(nombreArchivo);
     infoInicialInstancia(piezas);
 
-    H = calcularAlturaMax(piezas);
-    cout<<"Altura maxima es: "<<H<<endl;
+    int H_max = calcularAlturaMax(piezas);
+    cout<<"Altura maxima es: "<<H_max<<endl;
+
+    H = 0;
+
+    vector<int> orden(n);
+    
+    
+    for(int i = 0; i < n; i++){
+        orden[i] = i;
+    }
+
+    Solucion sol_inicial;
+    sol_inicial.orden = orden;
+    sol_inicial.piezas = piezas;
+
+    int H1 = evaluar(orden, piezas);
+    evaluar(sol_inicial);
+    int H2 = sol_inicial.H_sol;
+    /*for(int i = 0; i < W; i++){
+        cout<<"Altura en la columna "<<i+1<<" es "<<alturaColumnas[i]<<endl;
+    }*/
+
+    cout<<"H1 es: "<<H1<<endl;
+    cout<<"H2 es: "<<H2<<endl;
+
+    for(int i = 0; i < n; i++){
+        cout<<"Coordenadas pieza "<<i<<":"<<sol_inicial.piezas[i].posX<<","<<sol_inicial.piezas[i].posY<<endl;
+    }
+
 }
