@@ -1,0 +1,112 @@
+Algoritmo = Simulated Annealing (SA)
+
+Problema = Two-Dimensional Stip Packing Problem (2DSPP)
+
+Acercamiento = Soluciones factibles
+
+Representación = Vector de orden (permutación del indice de las piezas)
+
+Funcion de evaluacion = Altura total utilizada en la franja
+
+Movimientos disponibles:
+    -SWAP: Intercambio entre dos posiciones del vector
+    -Rotación 90°: Se rota una pieza (cambia entre el ancho y alto)
+
+Solucion inicial = Permutación aleatoria del orden de inserción.
+
+Semilla utilizada = 20031202
+
+Formato input =
+    n <- cantidad de piezas
+    W <- ancho de la franja
+    indice_pieza1 ancho_1 alto_1
+    ...
+    indice_piezaN ancho_N alto_N
+
+    Ej:
+        3
+        10
+        1 4 12
+        2 8 6
+        3 3 9
+
+Se ocuparon estas bibliotecas:
+    iostream
+    fstream
+    vector
+    string
+    algorithm
+    random
+    cmath
+    chrono
+    ctime
+    sstream
+    iomanip
+    sys/stat.h
+
+-----------------------------------------------------------------------
+Para compilar use:
+    make clean
+    make
+
+Para ejecutar use:
+    ./2dspp nombreInstancia temp alpha maxIter debug
+
+    nombreInstancia = Nombre del archivo txt sin extensión .txt, es decir, BENG01 es correcto, BENG01.txt no es correcto.
+    temp = temperatura inicial(float)
+    alpha = factor de enfriamiento (float)
+    maxIter = número máximo de iteraciones
+    debug = 0 no muestra información por pantalla, 1 si muestra información por pantalla
+
+    Ej: 
+        ./2dspp BENG01 100 0.9 1000 0
+        ./2dspp BENG01 200 0.85 4000 1
+        ./2dspp NGCUT04 150 0.5 200 0
+
+Salida:
+    Se genera automáticamente un archivo dentro de la carpeta salidas_pauta con el siguiente formato:
+        resultado_nombreInstancia_T°inicial_alpha_maxIter_semilla_timestamp.txt
+            Que contiene:
+                - Altura final de la mejor solución
+                - Área no utilizada por las piezas dentro de la franja
+                - Coordenadas X e Y de cada pieza
+                - Cantidad de rotaciones por pieza
+
+                    altura final
+                    área no utilizada
+                    coordenadaX_Pieza1 coordenadaY_Pieza1 cantidadRotaciones_Pieza1
+                    coordenadaX_Pieza2 coordenadaY_Pieza2 cantidadRotaciones_Pieza2
+                    ...
+                    coordenadaX_PiezaN coordenadaY_PiezaN cantidadRotaciones_PiezaN
+
+                Ej:
+                    33
+                    84
+                    12 7 2
+                    0 21 6
+                    ...
+                    17 0 4
+
+    Además, se agrega un linea en resultados_experimentos.csv:
+    nombreInstancia,semilla,T°Inicial,alpha,maxIteraciones,anchoFranja,alturaFranja,areaNoUtilizada,tiempoEjecuccion
+
+Experimentos realizados:
+    Se usó un archivo .sh para automatizar las pruebas.
+    Se probaron cada instancia 3 veces por configuración de parametros.
+
+    Parametros empleados:
+        TEMPS = (100 250 500 )
+        ALPHAS = (0.85 0.90 0.95)
+        ITERACIONES = (100 1000 2000 5000)
+    
+    Total aproximado = 3 x 3 x 4 ejecuciones por cada instancia.
+
+Estructura:
+PROYECTOIA-2DSPP
+|-2sp/ (carpeta con txt de prueba)
+|-salidas_pauta/ (carpeta donde se crearan los resultados en el formato pedido)
+|-resultados_experimentos (csv con los datos finales de los experimientos)
+|-main.cpp (codigo)
+|-experimentar.sh (archivo para automatizas los experimentos)
+|-README
+|-makefile

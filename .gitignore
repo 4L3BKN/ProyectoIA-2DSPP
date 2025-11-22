@@ -1,0 +1,7 @@
+# No subir salidas generadas automáticamente
+salidas_pauta/
+*.csv
+
+# Archivos del sistema
+.DS_Store
+*.out
