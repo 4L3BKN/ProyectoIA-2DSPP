@@ -88,7 +88,7 @@ Salida:
                     17 0 4
 
     Además, se agrega un linea en resultados_experimentos.csv:
-    nombreInstancia,semilla,T°Inicial,alpha,maxIteraciones,anchoFranja,alturaFranja,areaNoUtilizada,tiempoEjecuccion
+        nombreInstancia,semilla,T°Inicial,alpha,maxIteraciones,anchoFranja,alturaFranja,areaNoUtilizada,tiempoEjecucion
 
 Experimentos realizados:
     Se usó un archivo .sh para automatizar las pruebas.
@@ -101,6 +101,23 @@ Experimentos realizados:
     
     Total aproximado = 3 x 3 x 4 ejecuciones por cada instancia.
 
+Análisis:
+    Se usó un archivo .py para analizar automáticamente el archivo resultados_experimentos.csv obtenido tras las evaluaciones
+
+    Funciones principales:
+        - Lee el CSV y normaliza los nombres de columnas.
+        - Extrae el mejor resultado de cada instancia
+        - Calcula promedios y diferencias entre soluciones
+        - Identifica configuraciones óptimas
+        - Genera un gráfico de calidad vs estabilidad -> calidad_vs_estabilidad.png
+
+    Ejecución:
+        python3 analizar_csv.py
+
+    Librerias:
+        Pandas
+        Matplotlib
+
 Estructura:
 PROYECTOIA-2DSPP
 |-2sp/ (carpeta con txt de prueba)
@@ -108,5 +125,6 @@ PROYECTOIA-2DSPP
 |-resultados_experimentos (csv con los datos finales de los experimientos)
 |-main.cpp (codigo)
 |-experimentar.sh (archivo para automatizas los experimentos)
+|-analizar_csv.py (scrip de análisis con pandas)
 |-README
 |-makefile

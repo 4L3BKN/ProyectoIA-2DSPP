@@ -255,7 +255,7 @@ void escribirCSV(const string &nombreCSV,const string &nombreInstancia, float te
     }
 
     if(!existe){
-        archivo<<"nombreInstancia,semilla,T°Inicial,alpha,maxIteraciones,anchoFranja,alturaFranja,areaNoUtilizada,tiempoEjecuccion\n";
+        archivo<<"nombreInstancia,semilla,T°Inicial,alpha,maxIteraciones,anchoFranja,alturaFranja,areaNoUtilizada,tiempoEjecucion\n";
     }
 
     archivo << nombreInstancia <<","
